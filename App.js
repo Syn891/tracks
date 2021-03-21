@@ -1,21 +1,36 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { createAppContainer, createSwitchNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
+import { createBottomTabNavigator } from 'react-navigation-tabs';
+import AccountScreen from './src/Screens/AccountScreen';
+import SigninScreen from './src/Screens/SigninScreen';
+import SignupScreen from './src/Screens/SignupScreen';
+import TrackCreateScreen from './src/Screens/TrackCreateScreen';
+import TrackDetailScreen from './src/Screens/TrackDetailScreen';
+import TrackListScreen from './src/Screens/TrackListScreen';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+// Create switch navigator - used for abrubt switches between screens
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+const switchNavigator = createSwitchNavigator({
+
+    // list out the different things this navigator will display 
+    // loginFlow refers to authenication screens 
+    loginFlow: createStackNavigator({
+      Signup: SignupScreen,
+      Signin: SigninScreen
+    }),
+
+    //mainflow is non-authentication screens with bottom tab nav
+    // contains stack nav to switch between track list & detail
+    mainFlow: createBottomTabNavigator({
+      TrackListFlow: createStackNavigator({
+        TrackList: TrackListScreen,
+        TrackDetail: TrackDetailScreen
+      }),
+      TrackCreate: TrackCreateScreen,
+      Account: AccountScreen,
+
+    })
+})
+
+export default createAppContainer(switchNavigator)
